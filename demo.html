@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mixfy - Instrumentos Interactivos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #7b5c8e;
+      --primary-dark: #5a4160;
+      --primary-light: #9c7cad;
+      --secondary: #3d2447;
+      --accent: #d3bfdc;
+      --text: #333;
+      --text-light: #f4f1f7;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f4f1f7;
+      color: var(--text);
+      line-height: 1.6;
+      padding: 20px;
+    }
+    
+    .demo-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem;
+      background: white;
+      border-radius: 1.5rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      position: relative;
+    }
+    
+    h2 {
+      text-align: center;
+      color: var(--secondary);
+      margin-bottom: 2rem;
+      font-size: 2rem;
+    }
+    
+    .instrument-selector {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    
+    .instrument-btn {
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 50px;
+      background: var(--primary-light);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .instrument-btn.active {
+      background: var(--primary);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(123, 92, 142, 0.4);
+    }
+    
+    .instrument-btn:hover {
+      background: var(--primary);
+    }
+    
+    .instrument-section {
+      display: none;
+    }
+    
+    .instrument-section.active {
+      display: block;
+      animation: fadeIn 0.5s ease;
+    }
+    
+    /* Botón de volver */
+    .back-btn {
+      position: absolute;
+      top: 1.5rem;
+      left: 1.5rem;
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 50px;
+      background: var(--primary-dark);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+    
+    .back-btn:hover {
+      background: var(--secondary);
+      transform: translateY(-2px);
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    /* Piano */
+    .piano {
+      display: flex;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+    
+    .key {
+      height: 200px;
+      width: 60px;
+      border: 1px solid #ccc;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 1rem;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.1s ease;
+      background: white;
+      position: relative;
+    }
+    
+    .key.white {
+      border-radius: 0 0 5px 5px;
+      box-shadow: 0 5px 5px rgba(0,0,0,0.2);
+      z-index: 1;
+    }
+    
+    .key.black {
+      height: 120px;
+      width: 40px;
+      background: #333;
+      color: white;
+      margin-left: -20px;
+      margin-right: -20px;
+      z-index: 2;
+      border-radius: 0 0 5px 5px;
+    }
+    
+    .key.active {
+      transform: translateY(5px);
+      box-shadow: 0 2px 2px rgba(0,0,0,0.2);
+    }
+    
+    .key.white.active {
+      background: #f0f0f0;
+    }
+    
+    .key.black.active {
+      background: #111;
+    }
+    
+    /* Flauta */
+    .flute-holes {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin: 2rem auto;
+      max-width: 500px;
+      flex-wrap: wrap;
+    }
+    
+    .flute-hole {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #5a4160, #7b5c8e);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      user-select: none;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: all 0.1s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .flute-hole::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255,255,255,0.2);
+      transform: scale(0);
+      border-radius: 50%;
+      transition: transform 0.3s ease;
+    }
+    
+    .flute-hole.active::before {
+      transform: scale(1);
+    }
+    
+    .flute-hole i {
+      font-size: 1.5rem;
+    }
+    
+    /* Guitarra */
+    .guitar-strings {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-width: 500px;
+      margin: 2rem auto;
+    }
+    
+    .guitar-string {
+      height: 60px;
+      background: linear-gradient(to right, #f5f5f5, #e0e0e0);
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      padding: 0 1rem;
+      cursor: pointer;
+      transition: all 0.1s ease;
+      user-select: none;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .guitar-string::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to right, var(--primary-light), var(--primary));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+    
+    .guitar-string.active::before {
+      transform: scaleX(1);
+    }
+    
+    .guitar-string span {
+      position: relative;
+      z-index: 1;
+      color: var(--text);
+      font-weight: bold;
+    }
+    
+    .guitar-string.active span {
+      color: white;
+    }
+    
+    /* Teclado */
+    .keyboard-instructions {
+      text-align: center;
+      margin-top: 2rem;
+      color: var(--primary);
+      font-weight: 600;
+    }
+    
+    @media (max-width: 768px) {
+      .piano {
+        overflow-x: auto;
+        padding-bottom: 1rem;
+        justify-content: flex-start;
+      }
+      
+      .key {
+        width: 40px;
+        height: 150px;
+      }
+      
+      .key.black {
+        width: 30px;
+        height: 90px;
+        margin-left: -15px;
+        margin-right: -15px;
+      }
+      
+      .flute-holes {
+        gap: 0.8rem;
+      }
+      
+      .flute-hole {
+        width: 50px;
+        height: 50px;
+      }
+      
+      .back-btn {
+        top: 1rem;
+        left: 1rem;
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-container">
+    <!-- Botón de volver -->
+    <button class="back-btn" onclick="window.location.href='index.html'">
+      <i class="fas fa-arrow-left"></i> Volver
+    </button>
+    
+    <h2>Instrumentos Interactivos</h2>
+    
+    <div class="instrument-selector">
+      <button class="instrument-btn active" data-instrument="piano">
+        <i class="fas fa-music"></i> Piano
+      </button>
+      <button class="instrument-btn" data-instrument="flute">
+        <i class="fas fa-music"></i> Flauta
+      </button>
+      <button class="instrument-btn" data-instrument="guitar">
+        <i class="fas fa-guitar"></i> Guitarra
+      </button>
+    </div>
+    
+    <!-- Piano -->
+    <div class="instrument-section active" id="piano">
+      <div class="piano">
+        <div class="key white" data-note="C4">C</div>
+        <div class="key black" data-note="C#4">C#</div>
+        <div class="key white" data-note="D4">D</div>
+        <div class="key black" data-note="D#4">D#</div>
+        <div class="key white" data-note="E4">E</div>
+        <div class="key white" data-note="F4">F</div>
+        <div class="key black" data-note="F#4">F#</div>
+        <div class="key white" data-note="G4">G</div>
+        <div class="key black" data-note="G#4">G#</div>
+        <div class="key white" data-note="A4">A</div>
+        <div class="key black" data-note="A#4">A#</div>
+        <div class="key white" data-note="B4">B</div>
+        <div class="key white" data-note="C5">C</div>
+      </div>
+      <p class="keyboard-instructions">Usa las teclas A,S,D,F,G,H,J para tocar el piano</p>
+    </div>
+    
+    <!-- Flauta -->
+    <div class="instrument-section" id="flute">
+      <div class="flute-holes">
+        <div class="flute-hole" data-note="C5">
+          <i class="fas fa-circle"></i>
+          <span>C (1)</span>
+        </div>
+        <div class="flute-hole" data-note="D5">
+          <i class="fas fa-circle"></i>
+          <span>D (2)</span>
+        </div>
+        <div class="flute-hole" data-note="E5">
+          <i class="fas fa-circle"></i>
+          <span>E (3)</span>
+        </div>
+        <div class="flute-hole" data-note="F5">
+          <i class="fas fa-circle"></i>
+          <span>F (4)</span>
+        </div>
+        <div class="flute-hole" data-note="G5">
+          <i class="fas fa-circle"></i>
+          <span>G (5)</span>
+        </div>
+        <div class="flute-hole" data-note="A5">
+          <i class="fas fa-circle"></i>
+          <span>A (6)</span>
+        </div>
+        <div class="flute-hole" data-note="B5">
+          <i class="fas fa-circle"></i>
+          <span>B (7)</span>
+        </div>
+        <div class="flute-hole" data-note="C6">
+          <i class="fas fa-circle"></i>
+          <span>C (8)</span>
+        </div>
+      </div>
+      <p class="keyboard-instructions">Haz clic en los agujeros o usa las teclas 1-8 para tocar notas</p>
+    </div>
+    
+    <!-- Guitarra -->
+    <div class="instrument-section" id="guitar">
+      <div class="guitar-strings">
+        <div class="guitar-string" data-note="E2">Cuerda E (6ª) - Q</div>
+        <div class="guitar-string" data-note="A2">Cuerda A (5ª) - W</div>
+        <div class="guitar-string" data-note="D3">Cuerda D (4ª) - E</div>
+        <div class="guitar-string" data-note="G3">Cuerda G (3ª) - R</div>
+        <div class="guitar-string" data-note="B3">Cuerda B (2ª) - T</div>
+        <div class="guitar-string" data-note="E4">Cuerda E (1ª) - Y</div>
+      </div>
+      <p class="keyboard-instructions">Haz clic en las cuerdas o usa las teclas Q,W,E,R,T,Y</p>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Inicializar Tone.js
+      Tone.start();
+      
+      // Variables para controlar el instrumento activo
+      let activeInstrument = 'piano';
+      
+      // Sintetizador para piano
+      const pianoSynth = new Tone.PolySynth(Tone.Synth, {
+        envelope: {
+          attack: 0.02,
+          decay: 0.1,
+          sustain: 0.3,
+          release: 0.5
+        }
+      }).toDestination();
+      
+      // Sintetizador para flauta
+      const fluteSynth = new Tone.PolySynth(Tone.MonoSynth, {
+        oscillator: {
+          type: "sine"
+        },
+        envelope: {
+          attack: 0.01,
+          decay: 0.2,
+          sustain: 0.3,
+          release: 0.4
+        },
+        filterEnvelope: {
+          attack: 0.001,
+          decay: 0.1,
+          sustain: 0.2,
+          release: 0.3,
+          baseFrequency: 1000,
+          octaves: 2
+        }
+      }).toDestination();
+      
+      // Sintetizador para guitarra
+      const guitarSynth = new Tone.PolySynth(Tone.MonoSynth, {
+        oscillator: {
+          type: "fatsawtooth",
+          count: 3,
+          spread: 30
+        },
+        envelope: {
+          attack: 0.01,
+          decay: 0.1,
+          sustain: 0.5,
+          release: 0.4
+        },
+        filterEnvelope: {
+          attack: 0.001,
+          decay: 0.1,
+          sustain: 0.4,
+          release: 0.5,
+          baseFrequency: 200,
+          octaves: 2
+        }
+      }).toDestination();
+      
+      // Cambiar entre instrumentos
+      const instrumentBtns = document.querySelectorAll('.instrument-btn');
+      const instrumentSections = document.querySelectorAll('.instrument-section');
+      
+      instrumentBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          activeInstrument = this.dataset.instrument;
+          
+          // Actualizar botones activos
+          instrumentBtns.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          
+          // Mostrar sección activa
+          instrumentSections.forEach(section => section.classList.remove('active'));
+          document.getElementById(activeInstrument).classList.add('active');
+        });
+      });
+      
+      // Piano interactivo
+      const pianoKeys = document.querySelectorAll('.key');
+      
+      pianoKeys.forEach(key => {
+        // Evento de clic
+        key.addEventListener('mousedown', function() {
+          if (activeInstrument === 'piano') {
+            playPianoNote(this.dataset.note);
+            this.classList.add('active');
+          }
+        });
+        
+        key.addEventListener('mouseup', function() {
+          this.classList.remove('active');
+        });
+        
+        key.addEventListener('mouseleave', function() {
+          this.classList.remove('active');
+        });
+      });
+      
+      function playPianoNote(note) {
+        pianoSynth.triggerAttackRelease(note, "8n");
+      }
+      
+      // Flauta interactiva
+      const fluteHoles = document.querySelectorAll('.flute-hole');
+      
+      fluteHoles.forEach(hole => {
+        // Evento de clic
+        hole.addEventListener('mousedown', function() {
+          if (activeInstrument === 'flute') {
+            playFluteNote(this.dataset.note);
+            this.classList.add('active');
+          }
+        });
+        
+        hole.addEventListener('mouseup', function() {
+          this.classList.remove('active');
+        });
+        
+        hole.addEventListener('mouseleave', function() {
+          this.classList.remove('active');
+        });
+      });
+      
+      function playFluteNote(note) {
+        fluteSynth.triggerAttackRelease(note, "8n");
+      }
+      
+      // Guitarra interactiva
+      const guitarStrings = document.querySelectorAll('.guitar-string');
+      
+      guitarStrings.forEach((string, index) => {
+        // Evento de clic
+        string.addEventListener('mousedown', function() {
+          if (activeInstrument === 'guitar') {
+            playGuitarNote(this.dataset.note);
+            this.classList.add('active');
+          }
+        });
+        
+        string.addEventListener('mouseup', function() {
+          this.classList.remove('active');
+        });
+      });
+      
+      function playGuitarNote(note) {
+        guitarSynth.triggerAttackRelease(note, "8n");
+      }
+      
+      // Control por teclado
+      document.addEventListener('keydown', function(e) {
+        // Solo procesar teclas si no es un input
+        if (e.target.tagName === 'INPUT') return;
+        
+        // Piano (A,S,D,F,G,H,J)
+        if (activeInstrument === 'piano') {
+          const pianoKeysMap = {
+            'a': 'C4', 'w': 'C#4', 's': 'D4', 'e': 'D#4', 'd': 'E4',
+            'f': 'F4', 't': 'F#4', 'g': 'G4', 'y': 'G#4', 'h': 'A4',
+            'u': 'A#4', 'j': 'B4', 'k': 'C5'
+          };
+          
+          if (pianoKeysMap[e.key.toLowerCase()]) {
+            const note = pianoKeysMap[e.key.toLowerCase()];
+            playPianoNote(note);
+            highlightPianoKey(note);
+          }
+        }
+        
+        // Flauta (1-8)
+        else if (activeInstrument === 'flute') {
+          const fluteNotes = ['C5', 'D5', 'E5', 'F5', 'G5', 'A5', 'B5', 'C6'];
+          const keyIndex = parseInt(e.key) - 1;
+          
+          if (keyIndex >= 0 && keyIndex < fluteNotes.length) {
+            const note = fluteNotes[keyIndex];
+            playFluteNote(note);
+            highlightFluteHole(note);
+          }
+        }
+        
+        // Guitarra (Q,W,E,R,T,Y)
+        else if (activeInstrument === 'guitar') {
+          const guitarStringsMap = {
+            'q': 'E2', 'w': 'A2', 'e': 'D3', 'r': 'G3', 't': 'B3', 'y': 'E4'
+          };
+          
+          if (guitarStringsMap[e.key.toLowerCase()]) {
+            const note = guitarStringsMap[e.key.toLowerCase()];
+            playGuitarNote(note);
+            highlightGuitarString(note);
+          }
+        }
+      });
+      
+      function highlightPianoKey(note) {
+        const key = document.querySelector(`.key[data-note="${note}"]`);
+        if (key) {
+          key.classList.add('active');
+          setTimeout(() => {
+            key.classList.remove('active');
+          }, 100);
+        }
+      }
+      
+      function highlightFluteHole(note) {
+        const hole = document.querySelector(`.flute-hole[data-note="${note}"]`);
+        if (hole) {
+          hole.classList.add('active');
+          setTimeout(() => {
+            hole.classList.remove('active');
+          }, 100);
+        }
+      }
+      
+      function highlightGuitarString(note) {
+        const string = document.querySelector(`.guitar-string[data-note="${note}"]`);
+        if (string) {
+          string.classList.add('active');
+          setTimeout(() => {
+            string.classList.remove('active');
+          }, 300);
+        }
+      }
+    });
+  </script>
+</body>
+</html>

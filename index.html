@@ -1,0 +1,1916 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <!-- Meta viewport esencial para responsive -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0" />
+  <meta name="description" content="Mixfy - Crea, mezcla y comparte melodías fácilmente con nuestra app móvil. La herramienta perfecta para productores musicales y aficionados.">
+  <title>Mixfy - Crea tu música</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <style>
+    :root {
+      --primary: #7b5c8e;
+      --primary-dark: #5a4160;
+      --primary-light: #9c7cad;
+      --secondary: #3d2447;
+      --accent: #d3bfdc;
+      --text: #333;
+      --text-light: #f4f1f7;
+      --gradient: linear-gradient(135deg, #7b5c8e 0%, #3d2447 100%);
+      
+      /* Tamaños base responsivos */
+      --base-font-size: clamp(16px, 2vw, 18px);
+      --h1-size: clamp(2.5rem, 5vw, 4.5rem);
+      --h2-size: clamp(1.8rem, 3vw, 2.5rem);
+      --h3-size: clamp(1.3rem, 2.5vw, 1.8rem);
+      --section-padding: clamp(3rem, 5vw, 6rem) clamp(1rem, 3vw, 2rem);
+      --container-max-width: min(1200px, 90vw);
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    html {
+      font-size: var(--base-font-size);
+      scroll-behavior: smooth;
+    }
+    
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #f4f1f7;
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    
+    /* Scroll personalizado */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--accent);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 5px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary-dark);
+    }
+    
+    /* Navegación */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(61, 36, 71, 0.9);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      padding: 0.8rem 0;
+      transition: all 0.3s ease;
+    }
+    
+    nav.scrolled {
+      padding: 0.5rem 0;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+    
+    .nav-container {
+      max-width: var(--container-max-width);
+      margin: 0 auto;
+      padding: 0 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      color: white;
+      font-size: clamp(1.5rem, 4vw, 1.8rem);
+      font-weight: 700;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo i {
+      margin-right: 0.6rem;
+      color: var(--accent);
+      font-size: clamp(1.3rem, 3vw, 1.5rem);
+    }
+    
+    .nav-links {
+      display: flex;
+      list-style: none;
+      transition: all 0.5s ease;
+    }
+    
+    .nav-links li {
+      margin-left: clamp(1rem, 2vw, 1.8rem);
+    }
+    
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      position: relative;
+      font-size: clamp(0.9rem, 2vw, 1rem);
+    }
+    
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -0.3rem;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--accent);
+      transition: width 0.3s ease;
+    }
+    
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+    
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0.5rem;
+    }
+    
+    header {
+      background: linear-gradient(rgba(61, 36, 71, 0.9), rgba(61, 36, 71, 0.9)), 
+                  url('https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: white;
+      text-align: center;
+      padding: var(--section-padding);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    header::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 6rem;
+      background: linear-gradient(transparent, #f4f1f7);
+      z-index: 1;
+    }
+    
+    header h1 {
+      font-size: var(--h1-size);
+      margin: 0;
+      line-height: 1.2;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      transform: translateY(20px);
+      opacity: 0;
+      animation: fadeInUp 1s ease forwards 0.3s;
+      padding: 0 1rem;
+    }
+    
+    header p {
+      font-size: clamp(1rem, 2vw, 1.3rem);
+      margin: 1.5rem 0 2.5rem;
+      max-width: min(700px, 90vw);
+      text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      transform: translateY(20px);
+      opacity: 0;
+      animation: fadeInUp 1s ease forwards 0.5s;
+      padding: 0 1rem;
+    }
+    
+    .header-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: 100%;
+      padding: 0 1rem;
+    }
+    
+    .btn {
+      padding: clamp(0.8rem, 2vw, 1rem) clamp(1.5rem, 3vw, 2rem);
+      background: var(--primary);
+      border: none;
+      color: white;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-block;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      position: relative;
+      overflow: hidden;
+      transform: translateY(20px);
+      opacity: 0;
+      animation: fadeInUp 1s ease forwards 0.7s;
+      font-size: clamp(0.9rem, 2vw, 1rem);
+      text-align: center;
+      flex-grow: 1;
+      max-width: 300px;
+    }
+    
+    .btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+    
+    .btn:active {
+      transform: translateY(1px);
+    }
+    
+    .btn::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, transparent 25%, rgba(255,255,255,0.1) 50%, transparent 75%);
+      background-size: 400% 400%;
+      transition: all 0.5s ease;
+      opacity: 0;
+    }
+    
+    .btn:hover::after {
+      opacity: 1;
+      animation: shine 2s linear infinite;
+    }
+    
+    section {
+      padding: var(--section-padding);
+      max-width: var(--container-max-width);
+      margin: auto;
+    }
+    
+    h2 {
+      font-size: var(--h2-size);
+      margin-bottom: 2rem;
+      position: relative;
+      display: inline-block;
+      color: var(--secondary);
+    }
+    
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: -0.8rem;
+      left: 0;
+      width: 4rem;
+      height: 4px;
+      background: var(--gradient);
+      border-radius: 2px;
+    }
+    
+    h3 {
+      font-size: var(--h3-size);
+    }
+    
+    .features, .downloads, .contact, .about-socials, .demo-container, .pricing, .gallery, .blog-preview, .faq {
+      background: white;
+      border-radius: 1.5rem;
+      padding: clamp(1.5rem, 3vw, 2.5rem);
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .features:hover, .downloads:hover, .contact:hover, .about-socials:hover, .demo-container:hover, .pricing:hover, .gallery:hover, .blog-preview:hover, .faq:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+    
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    
+    .feature-item {
+      background: rgba(156, 124, 173, 0.1);
+      padding: 1.5rem;
+      border-radius: 1rem;
+      transition: all 0.3s ease;
+      border-left: 4px solid var(--primary);
+    }
+    
+    .feature-item:hover {
+      transform: translateX(10px);
+      background: rgba(156, 124, 173, 0.2);
+    }
+    
+    .feature-item i {
+      font-size: 1.5rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      display: inline-block;
+    }
+    
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+      gap: 2rem;
+    }
+    
+    input, textarea, select {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      margin-top: 0.8rem;
+      border: 2px solid #eee;
+      border-radius: 0.8rem;
+      font-family: 'Poppins', sans-serif;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+    }
+    
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(156, 124, 173, 0.3);
+    }
+    
+    button[type="submit"] {
+      margin-top: 1.5rem;
+      background: var(--gradient);
+      color: white;
+      border: none;
+      padding: 0.8rem;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(123, 92, 142, 0.3);
+      width: 100%;
+      font-size: 1rem;
+    }
+    
+    button[type="submit"]:hover {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary) 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(123, 92, 142, 0.4);
+    }
+    
+    .instagram-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.8rem 1.5rem;
+      background: rgba(131, 58, 180, 0.1);
+      border-radius: 50px;
+      text-decoration: none;
+      color: var(--text);
+      transition: all 0.3s ease;
+      margin-top: 1.5rem;
+      font-size: 1rem;
+    }
+    
+    .instagram-link:hover {
+      background: rgba(131, 58, 180, 0.2);
+      transform: translateX(5px);
+    }
+    
+    .instagram-link i {
+      font-size: 1.5rem;
+      color: #833ab4;
+    }
+    
+    .download-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    
+    footer {
+      text-align: center;
+      padding: 3rem 1rem;
+      background: var(--secondary);
+      color: white;
+      position: relative;
+    }
+    
+    footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: var(--gradient);
+    }
+    
+    .footer-content {
+      max-width: var(--container-max-width);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+      gap: 2rem;
+      text-align: left;
+    }
+    
+    .footer-column h3 {
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      font-size: 1.2rem;
+    }
+    
+    .footer-links {
+      list-style: none;
+    }
+    
+    .footer-links li {
+      margin-bottom: 0.8rem;
+    }
+    
+    .footer-links a {
+      color: white;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+    
+    .footer-links a:hover {
+      color: var(--accent);
+      padding-left: 5px;
+    }
+    
+    .social-icons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+    
+    .social-icons a {
+      color: white;
+      font-size: 1.3rem;
+      transition: all 0.3s ease;
+    }
+    
+    .social-icons a:hover {
+      color: var(--accent);
+      transform: translateY(-3px);
+    }
+    
+    .copyright {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      font-size: 0.9rem;
+    }
+    
+    /* Efecto de partículas */
+    .particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+    }
+    
+    .particle {
+      position: absolute;
+      background: rgba(255,255,255,0.5);
+      border-radius: 50%;
+      animation: float linear infinite;
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-1000px) rotate(720deg);
+        opacity: 0;
+      }
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes shine {
+      0% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+    
+    /* Efecto de onda */
+    .wave {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 6rem;
+      background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" fill="%23f4f1f7" opacity=".25"/><path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" fill="%23f4f1f7" opacity=".5"/><path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" fill="%23f4f1f7"/></svg>');
+      background-size: cover;
+      background-repeat: no-repeat;
+      z-index: 2;
+    }
+    
+    /* Tarjetas giratorias para descargas */
+    .download-card {
+      perspective: 1000px;
+      margin-bottom: 1.5rem;
+    }
+    
+    .download-card-inner {
+      position: relative;
+      width: 100%;
+      height: 5rem;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
+    
+    .download-card:hover .download-card-inner {
+      transform: rotateY(180deg);
+    }
+    
+    .download-card-front, .download-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 1.5rem;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .download-card-front {
+      background: white;
+      color: var(--text);
+    }
+    
+    .download-card-back {
+      background: var(--gradient);
+      color: white;
+      transform: rotateY(180deg);
+    }
+    
+    .download-icon {
+      margin-right: 1rem;
+      font-size: 1.5rem;
+    }
+    
+    /* Reproductor de audio mejorado */
+    .audio-player {
+      width: 100%;
+      margin: 1.5rem 0;
+      background: rgba(123, 92, 142, 0.1);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .player-controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .player-btn {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(123, 92, 142, 0.3);
+    }
+    
+    .player-btn:hover {
+      background: var(--primary-dark);
+      transform: scale(1.05);
+    }
+    
+    .player-btn i {
+      font-size: 1.2rem;
+    }
+    
+    .progress-container {
+      width: 100%;
+      height: 0.5rem;
+      background: #e0e0e0;
+      border-radius: 0.5rem;
+      margin: 1rem 0;
+      cursor: pointer;
+      overflow: hidden;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      background: var(--gradient);
+      width: 0%;
+      border-radius: 0.5rem;
+      transition: width 0.1s linear;
+    }
+    
+    .time-display {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+    
+    .track-info {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    
+    .track-title {
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      color: var(--secondary);
+    }
+    
+    .track-artist {
+      color: var(--primary);
+      font-size: 0.9rem;
+    }
+    
+    /* Visualizador de audio mejorado */
+    .audio-visualizer {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      height: 10rem;
+      gap: 0.3rem;
+      margin: 2rem 0;
+      background: rgba(0,0,0,0.05);
+      border-radius: 1rem;
+      padding: 1rem;
+    }
+    
+    .audio-bar {
+      width: 0.8rem;
+      min-height: 0.2rem;
+      background: var(--primary-light);
+      border-radius: 0.3rem;
+      transition: height 0.1s ease;
+    }
+    
+    /* Efectos de onda para el visualizador */
+    @keyframes wave {
+      0% { transform: scaleY(1); }
+      50% { transform: scaleY(1.5); }
+      100% { transform: scaleY(1); }
+    }
+    
+    /* Selector de pistas */
+    .track-selector {
+      margin-top: 1rem;
+      width: 100%;
+    }
+    
+    .track-selector select {
+      width: 100%;
+      padding: 0.8rem;
+      border-radius: 0.8rem;
+      border: 2px solid var(--accent);
+      background: white;
+      font-family: 'Poppins', sans-serif;
+      color: var(--text);
+    }
+    
+    /* Efecto de pulsación para las barras del visualizador */
+    .pulse {
+      animation: pulse 0.5s infinite alternate;
+    }
+    
+    @keyframes pulse {
+      from { opacity: 0.6; }
+      to { opacity: 1; }
+    }
+    
+    /* Galería */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(250px, 100%), 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    
+    .gallery-item {
+      position: relative;
+      border-radius: 1rem;
+      overflow: hidden;
+      aspect-ratio: 1/1;
+    }
+    
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .gallery-item:hover img {
+      transform: scale(1.1);
+    }
+    
+    .gallery-item .overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.7));
+      padding: 1rem;
+      color: white;
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+    }
+    
+    .gallery-item:hover .overlay {
+      transform: translateY(0);
+    }
+    
+    /* Blog */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    
+    .blog-card {
+      background: white;
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+    }
+    
+    .blog-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    }
+    
+    .blog-image {
+      height: 12rem;
+      overflow: hidden;
+    }
+    
+    .blog-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .blog-card:hover .blog-image img {
+      transform: scale(1.1);
+    }
+    
+    .blog-content {
+      padding: 1.5rem;
+    }
+    
+    .blog-date {
+      color: var(--primary);
+      font-size: 0.9rem;
+      margin-bottom: 0.8rem;
+    }
+    
+    .blog-title {
+      margin: 0 0 0.8rem;
+      font-size: 1.2rem;
+    }
+    
+    .blog-excerpt {
+      color: #666;
+      margin-bottom: 1.2rem;
+      font-size: 0.95rem;
+    }
+    
+    .read-more {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+      font-size: 0.95rem;
+    }
+    
+    .read-more i {
+      margin-left: 0.5rem;
+      transition: transform 0.3s ease;
+    }
+    
+    .read-more:hover i {
+      transform: translateX(5px);
+    }
+    
+    /* FAQ */
+    .faq-item {
+      margin-bottom: 1rem;
+      border-radius: 0.8rem;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+    }
+    
+    .faq-question {
+      padding: 1rem 1.3rem;
+      background: var(--accent);
+      color: var(--secondary);
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+    }
+    
+    .faq-question:hover {
+      background: var(--primary-light);
+      color: white;
+    }
+    
+    .faq-question::after {
+      content: '+';
+      font-size: 1.5rem;
+    }
+    
+    .faq-question.active::after {
+      content: '-';
+    }
+    
+    .faq-answer {
+      padding: 0;
+      max-height: 0;
+      overflow: hidden;
+      background: white;
+      transition: all 0.3s ease;
+    }
+    
+    .faq-answer-content {
+      padding: 1.3rem;
+      font-size: 0.95rem;
+    }
+    
+    /* Pricing */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    
+    .pricing-card {
+      background: white;
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      text-align: center;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .pricing-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    }
+    
+    .pricing-card.popular {
+      border: 2px solid var(--primary);
+    }
+    
+    .popular-badge {
+      position: absolute;
+      top: 1rem;
+      right: -2rem;
+      background: var(--primary);
+      color: white;
+      padding: 0.3rem 2rem;
+      transform: rotate(45deg);
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    
+    .pricing-name {
+      font-size: 1.5rem;
+      color: var(--secondary);
+      margin-bottom: 0.8rem;
+    }
+    
+    .pricing-price {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin: 1.5rem 0;
+    }
+    
+    .pricing-price span {
+      font-size: 1rem;
+      color: #666;
+    }
+    
+    .pricing-features {
+      list-style: none;
+      margin: 2rem 0;
+      text-align: left;
+    }
+    
+    .pricing-features li {
+      margin-bottom: 1rem;
+      position: relative;
+      padding-left: 2rem;
+      font-size: 0.95rem;
+    }
+    
+    .pricing-features li::before {
+      content: '\f00c';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+    }
+    
+    .pricing-features li.disabled {
+      color: #999;
+    }
+    
+    .pricing-features li.disabled::before {
+      content: '\f00d';
+      color: #ccc;
+    }
+    
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+    
+    .modal-content {
+      background: white;
+      border-radius: 1rem;
+      max-width: 50rem;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 2rem;
+      position: relative;
+      animation: modalFadeIn 0.3s ease;
+    }
+    
+    .close-modal {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      font-size: 1.5rem;
+      color: var(--primary);
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+    
+    .modal-image {
+      width: 100%;
+      height: 18rem;
+      object-fit: cover;
+      border-radius: 0.8rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    @keyframes modalFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* Nota musical interactiva MEJORADA */
+    .music-note {
+      position: fixed;
+      top: 1.5rem;
+      left: 1.5rem;
+      font-size: 2.5rem;
+      color: var(--primary);
+      z-index: 1001;
+      cursor: pointer;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+      transform-origin: center;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1) rotate(0deg); }
+      50% { transform: scale(1.3) rotate(10deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* Efecto de onda de sonido */
+    .sound-wave {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    .wave-circle {
+      position: absolute;
+      border-radius: 50%;
+      border: 2px solid;
+      transform: scale(0.1);
+      opacity: 0.8;
+      width: 1.5rem;
+      height: 1.5rem;
+      animation: waveExpand 2s ease-out forwards;
+      pointer-events: none;
+    }
+    
+    @keyframes waveExpand {
+      0% {
+        transform: scale(0.1);
+        opacity: 0.8;
+      }
+      100% {
+        transform: scale(3);
+        opacity: 0;
+      }
+    }
+    
+    /* Scroll down animation */
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-1rem);
+      }
+      60% {
+        transform: translateY(-0.5rem);
+      }
+    }
+    
+    /* Media Queries para dispositivos específicos */
+    
+    /* Pantallas pequeñas (móviles) */
+    @media (max-width: 640px) {
+      :root {
+        --base-font-size: 16px;
+        --h1-size: 2.2rem;
+        --h2-size: 1.6rem;
+        --section-padding: 2.5rem 1rem;
+      }
+      
+      .nav-links {
+        position: fixed;
+        top: 4.5rem;
+        left: -100%;
+        width: 100%;
+        height: calc(100vh - 4.5rem);
+        background: rgba(61, 36, 71, 0.95);
+        backdrop-filter: blur(10px);
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding-top: 2rem;
+        transition: all 0.5s ease;
+      }
+      
+      .nav-links.active {
+        left: 0;
+      }
+      
+      .nav-links li {
+        margin: 0.8rem 0;
+      }
+      
+      .mobile-menu-btn {
+        display: block;
+      }
+      
+      header {
+        padding-top: 6rem;
+        padding-bottom: 4rem;
+      }
+      
+      .header-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .header-buttons .btn {
+        margin-left: 0 !important;
+        margin-top: 0.8rem;
+      }
+      
+      .music-note {
+        font-size: 2rem;
+      }
+      
+      .pricing-card {
+        padding: 1.5rem;
+      }
+      
+      .modal-content {
+        padding: 1.5rem;
+      }
+      
+      .modal-image {
+        height: 12rem;
+      }
+    }
+    
+    /* Tabletas */
+    @media (min-width: 641px) and (max-width: 1024px) {
+      :root {
+        --base-font-size: 17px;
+        --h1-size: 3rem;
+        --section-padding: 4rem 1.5rem;
+      }
+      
+      .nav-links li {
+        margin-left: 1.2rem;
+      }
+      
+      .feature-item {
+        padding: 1.2rem;
+      }
+      
+      .blog-grid {
+        grid-template-columns: repeat(auto-fill, minmax(45%, 1fr));
+      }
+    }
+    
+    /* Pantallas grandes (TVs) */
+    @media (min-width: 1600px) {
+      :root {
+        --base-font-size: 20px;
+        --container-max-width: 1400px;
+      }
+      
+      .features-grid {
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      }
+      
+      .pricing-grid {
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      }
+    }
+    
+    /* Orientación horizontal en móviles */
+    @media (max-height: 500px) and (orientation: landscape) {
+      header {
+        min-height: auto;
+        padding-top: 6rem;
+        padding-bottom: 4rem;
+      }
+      
+      .nav-links {
+        top: 3.5rem;
+        height: calc(100vh - 3.5rem);
+      }
+    }
+    
+    /* Ajustes para iOS */
+    @supports (-webkit-touch-callout: none) {
+      /* Safari específico */
+      .nav-links {
+        -webkit-overflow-scrolling: touch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Nota musical interactiva mejorada -->
+  <div class="music-note" id="musicNote">
+    <i class="fas fa-music"></i>
+  </div>
+
+  <!-- Navegación -->
+  <nav id="navbar">
+    <div class="nav-container">
+      <a href="#" class="logo"><i class="fas fa-music"></i> Mixfy</a>
+      <button class="mobile-menu-btn" id="mobileMenuBtn">
+        <i class="fas fa-bars"></i>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#features">Características</a></li>
+        <li><a href="#demo">Demo</a></li>
+        <li><a href="#pricing">Precios</a></li>
+        <li><a href="#gallery">Samples</a></li>
+        <li><a href="#blog">Blog</a></li>
+        <li><a href="#contact">Contacto</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Efecto de partículas -->
+  <div class="particles" id="particles"></div>
+  
+  <!-- Encabezado -->
+  <header>
+    <div class="wave"></div>
+    <h1 class="animate__animated animate__fadeIn">Crea tu música con Mixfy</h1>
+    <p class="animate__animated animate__fadeIn">La herramienta definitiva para productores musicales y aficionados. Crea, mezcla y comparte tus melodías de forma intuitiva.</p>
+    
+    <div class="header-buttons">
+      <a href="demo.html" target="_blank" class="btn animate__animated animate__fadeIn">Probar demo</a>
+      <a href="#download" class="btn animate__animated animate__fadeIn animate__delay-1s">Descargar ahora</a>
+    </div>
+    
+    <!-- Flecha de scroll -->
+    <div class="scroll-down animate__animated animate__fadeIn animate__delay-1s">
+      <a href="#features" style="color: white;"><i class="fas fa-chevron-down" style="font-size: 2rem; margin-top: 3rem; animation: bounce 2s infinite;"></i></a>
+    </div>
+  </header>
+
+  <!-- Sección de características -->
+  <section class="features" id="features">
+    <h2>Potentes características</h2>
+    <p>Descubre todo lo que Mixfy puede hacer por tu creatividad musical</p>
+    
+    <ul class="features-grid">
+      <li class="feature-item">
+        <i class="fas fa-sliders-h"></i>
+        <h3>Mezclador profesional</h3>
+        <p>Controla volumen, paneo, ecualización y efectos para cada pista con nuestra interfaz intuitiva.</p>
+      </li>
+      <li class="feature-item">
+        <i class="fas fa-drum"></i>
+        <h3>Biblioteca de sonidos</h3>
+        <p>Accede a miles de samples y loops profesionales en todos los géneros musicales.</p>
+      </li>
+      <li class="feature-item">
+        <i class="fas fa-mobile-alt"></i>
+        <h3>Multiplataforma</h3>
+        <p>Trabaja en tus proyectos desde cualquier dispositivo, en cualquier momento.</p>
+      </li>
+      <li class="feature-item">
+        <i class="fas fa-cloud"></i>
+        <h3>Sincronización en la nube</h3>
+        <p>Tus proyectos se guardan automáticamente y están disponibles en todos tus dispositivos.</p>
+      </li>
+      <li class="feature-item">
+        <i class="fas fa-users"></i>
+        <h3>Colaboración en tiempo real</h3>
+        <p>Trabaja con otros artistas en el mismo proyecto simultáneamente.</p>
+      </li>
+      <li class="feature-item">
+        <i class="fas fa-chart-line"></i>
+        <h3>Analíticas avanzadas</h3>
+        <p>Obtén insights sobre cómo interactúan los oyentes con tus creaciones.</p>
+      </li>
+    </ul>
+    
+    <!-- Visualizador de audio -->
+    <div class="audio-visualizer" id="audioVisualizer">
+      <!-- Las barras se generarán con JavaScript -->
+    </div>
+    
+    <!-- Botón para abrir la demo en nueva pestaña -->
+    <div style="text-align: center; margin-top: 3rem;">
+      <a href="demo.html" target="_blank" class="btn">Probar demo interactiva</a>
+    </div>
+  </section>
+
+  <!-- Sección de precios -->
+  <section class="pricing" id="pricing">
+    <h2>Nuestros planes</h2>
+    <p>Elige el plan que mejor se adapte a tus necesidades creativas</p>
+    
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <h3 class="pricing-name">Básico</h3>
+        <div class="pricing-price">$0<span>/mes</span></div>
+        <ul class="pricing-features">
+          <li>100 samples básicos</li>
+          <li>10 proyectos simultáneos</li>
+          <li>Exportación en MP3</li>
+          <li>Colaboración con 1 persona</li>
+          <li class="disabled">Soporte prioritario</li>
+        </ul>
+        <a href="#download" class="btn" style="width: 100%;">Empezar gratis</a>
+      </div>
+      
+      <div class="pricing-card popular">
+        <div class="popular-badge">Popular</div>
+        <h3 class="pricing-name">Premium</h3>
+        <div class="pricing-price">$9.99<span>/mes</span></div>
+        <ul class="pricing-features">
+          <li>5,000+ samples premium</li>
+          <li>Proyectos ilimitados</li>
+          <li>Exportación en WAV/MP3</li>
+          <li>Colaboración con hasta 5 personas</li>
+          <li>Soporte prioritario</li>
+        </ul>
+        <a href="#download" class="btn" style="width: 100%; background: var(--secondary);">Elegir Premium</a>
+      </div>
+      
+      <div class="pricing-card">
+        <h3 class="pricing-name">Estudio</h3>
+        <div class="pricing-price">$19.99<span>/mes</span></div>
+        <ul class="pricing-features">
+          <li>Todos los samples premium</li>
+          <li>Proyectos ilimitados</li>
+          <li>Exportación en alta calidad</li>
+          <li>Colaboradores ilimitados</li>
+          <li>Soporte VIP 24/7</li>
+        </ul>
+        <a href="#download" class="btn" style="width: 100%;">Elegir Estudio</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Galería de Samples -->
+  <section class="gallery" id="gallery">
+    <h2>Nuestra colección de samples</h2>
+    <p>Explora algunos de los sonidos profesionales que incluye Mixfy</p>
+    
+    <div class="gallery-grid">
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1496293455970-f8581aae0e3b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1413&q=80" alt="Sample 1">
+        <div class="overlay">
+          <h3>Deep House Pack</h3>
+          <p>45 bajos y ritmos</p>
+        </div>
+      </div>
+      
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Sample 2">
+        <div class="overlay">
+          <h3>Urban Beats</h3>
+          <p>30 loops de hip-hop</p>
+        </div>
+      </div>
+      
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Sample 3">
+        <div class="overlay">
+          <h3>Live Instruments</h3>
+          <p>Guitarras y pianos reales</p>
+        </div>
+      </div>
+      
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1469&q=80" alt="Sample 4">
+        <div class="overlay">
+          <h3>Electronic Dreams</h3>
+          <p>Sintetizadores futuristas</p>
+        </div>
+      </div>
+    </div>
+    
+    <div style="text-align: center; margin-top: 2rem;">
+      <a href="#" class="btn">Explorar más samples</a>
+    </div>
+  </section>
+
+  <!-- Blog -->
+  <section class="blog-preview" id="blog">
+    <h2>Últimas del blog</h2>
+    <p>Aprende técnicas, consejos y trucos de producción musical</p>
+    
+    <div class="blog-grid">
+      <div class="blog-card">
+        <div class="blog-image">
+          <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Producción musical">
+        </div>
+        <div class="blog-content">
+          <div class="blog-date">15 MAY 2025</div>
+          <h3 class="blog-title">5 Errores comunes al mezclar tus pistas</h3>
+          <p class="blog-excerpt">Aprende a identificar y corregir los errores más frecuentes que cometen los productores novatos al mezclar sus canciones.</p>
+          <a class="read-more" onclick="openModal('modal1')">Leer más <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+      
+      <div class="blog-card">
+        <div class="blog-image">
+          <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Producción musical">
+        </div>
+        <div class="blog-content">
+          <div class="blog-date">8 MAY 2025</div>
+          <h3 class="blog-title">Cómo crear un beat atractivo en 10 pasos</h3>
+          <p class="blog-excerpt">Sigue esta guía paso a paso para crear ritmos profesionales incluso si eres principiante en la producción musical.</p>
+          <a class="read-more" onclick="openModal('modal2')">Leer más <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+      
+      <div class="blog-card">
+        <div class="blog-image">
+          <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Producción musical">
+        </div>
+        <div class="blog-content">
+          <div class="blog-date">1 MAY 2025</div>
+          <h3 class="blog-title">Los mejores plugins gratuitos para Mixfy</h3>
+          <p class="blog-excerpt">Descubre los complementos que potenciarán tus producciones sin necesidad de gastar dinero.</p>
+          <a class="read-more" onclick="openModal('modal3')">Leer más <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+    
+    <div style="text-align: center; margin-top: 2rem;">
+      <a href="#" class="btn">Ver todos los artículos</a>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq">
+    <h2>Preguntas frecuentes</h2>
+    <p>Encuentra respuestas a las dudas más comunes sobre Mixfy</p>
+    
+    <div class="faq-item">
+      <div class="faq-question">¿Mixfy es gratuito?</div>
+      <div class="faq-answer">
+        <div class="faq-answer-content">
+          Mixfy ofrece un plan gratuito con funciones básicas que te permite crear hasta 10 proyectos simultáneos con acceso a una selección de samples. También tenemos planes de pago con más funciones y recursos para aquellos que necesiten capacidades más avanzadas.
+        </div>
+      </div>
+    </div>
+    
+    <div class="faq-item">
+      <div class="faq-question">¿En qué dispositivos está disponible?</div>
+      <div class="faq-answer">
+        <div class="faq-answer-content">
+          Mixfy está disponible para iOS y Android. Puedes descargar la app desde la App Store (iPhone/iPad) y Google Play (dispositivos Android). Estamos trabajando en una versión web que estará disponible próximamente.
+        </div>
+      </div>
+    </div>
+    
+    <div class="faq-item">
+      <div class="faq-question">¿Puedo exportar mis canciones?</div>
+      <div class="faq-answer">
+        <div class="faq-answer-content">
+          ¡Sí! Con el plan gratuito puedes exportar tus creaciones en formato MP3. Los planes de pago te permiten exportar en formatos de mayor calidad como WAV, además de opciones para compartir directamente en plataformas como SoundCloud, Spotify y YouTube.
+        </div>
+      </div>
+    </div>
+    
+    <div class="faq-item">
+      <div class="faq-question">¿Cómo funciona la colaboración?</div>
+      <div class="faq-answer">
+        <div class="faq-answer-content">
+          La función de colaboración permite que varios usuarios trabajen en el mismo proyecto simultáneamente. Con el plan gratuito puedes colaborar con 1 persona, el plan Premium permite hasta 5 colaboradores, mientras que el plan Estudio permite colaboradores ilimitados. Todos los cambios se sincronizan en tiempo real.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Descargas -->
+  <section class="downloads" id="download">
+    <h2>Descarga Mixfy ahora</h2>
+    <p>Disponible en todas las plataformas móviles</p>
+    
+    <div class="grid">
+      <div>
+        <div class="download-buttons">
+          <div class="download-card">
+            <div class="download-card-inner">
+              <div class="download-card-front">
+                <i class="fab fa-google-play download-icon" style="color: #0F9D58;"></i>
+                <span>Disponible en Google Play</span>
+              </div>
+              <div class="download-card-back">
+                <span>Descargar para Android</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="download-card">
+            <div class="download-card-inner">
+              <div class="download-card-front">
+                <i class="fab fa-apple download-icon" style="color: #000;"></i>
+                <span>Descarga en App Store</span>
+              </div>
+              <div class="download-card-back">
+                <span>Descargar para iOS</span>
+              </div>
+            </div>
+          </div>
+          
+          <a href="#" class="btn" style="margin-top: 1.5rem;">Ver tutorial en video</a>
+        </div>
+      </div>
+      
+      <div>
+        <h3>¿Listo para crear?</h3>
+        <p>Escanea el código QR con tu dispositivo móvil para descargar la app directamente</p>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://mixfy.com/download" alt="QR Code" style="margin-top: 1rem; border: 0.8rem solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.1); max-width: 100%;">
+      </div>
+    </div>
+  </section>
+
+  <!-- Contacto -->
+  <section class="contact" id="contact">
+    <h2>Contáctanos</h2>
+    <p>¿Tienes preguntas, sugerencias o necesitas ayuda? Escríbenos.</p>
+    
+    <form action="https://formsubmit.co/mixfy.app@gmail.com" method="POST">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="text" name="nombre" placeholder="Nombre" required>
+      <input type="email" name="email" placeholder="Correo electrónico" required>
+      <select name="asunto" required>
+        <option value="">Selecciona un asunto</option>
+        <option value="soporte">Soporte técnico</option>
+        <option value="prensa">Prensa</option>
+        <option value="colaboracion">Oportunidades de colaboración</option>
+        <option value="feedback">Feedback/Sugerencias</option>
+      </select>
+      <textarea name="mensaje" placeholder="Tu mensaje" rows="4" required></textarea>
+      <button type="submit">Enviar mensaje</button>
+    </form>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-column">
+        <h3>Mixfy</h3>
+        <p>La herramienta definitiva para crear música en tu móvil. Diseñada por productores, para productores.</p>
+        <div class="social-icons">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+          <a href="#"><i class="fab fa-tiktok"></i></a>
+        </div>
+      </div>
+      
+      <div class="footer-column">
+        <h3>Enlaces</h3>
+        <ul class="footer-links">
+          <li><a href="#">Inicio</a></li>
+          <li><a href="#features">Características</a></li>
+          <li><a href="#pricing">Precios</a></li>
+          <li><a href="#blog">Blog</a></li>
+          <li><a href="#contact">Contacto</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h3>Legal</h3>
+        <ul class="footer-links">
+          <li><a href="#">Términos de servicio</a></li>
+          <li><a href="#">Política de privacidad</a></li>
+          <li><a href="#">Cookies</a></li>
+          <li><a href="#">DMCA</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h3>Recursos</h3>
+        <ul class="footer-links">
+          <li><a href="#">Documentación</a></li>
+          <li><a href="#">Centro de ayuda</a></li>
+          <li><a href="#">Tutoriales</a></li>
+          <li><a href="#">API para desarrolladores</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="copyright">
+      <p>&copy; 2025 Mixfy. Todos los derechos reservados.</p>
+      <p>Creado con ♥ por Sofia Fontan Rey</p>
+    </div>
+  </footer>
+
+  <!-- Modales para artículos del blog -->
+  <div class="modal" id="modal1">
+    <div class="modal-content">
+      <button class="close-modal" onclick="closeModal('modal1')">&times;</button>
+      <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Producción musical" class="modal-image">
+      <h2>5 Errores comunes al mezclar tus pistas</h2>
+      <div class="blog-date">15 MAY 2025</div>
+      <p>La mezcla es una de las etapas más críticas en la producción musical. Aquí te presentamos los 5 errores más comunes que debes evitar:</p>
+      <ol>
+        <li><strong>Exceso de compresión:</strong> Muchos productores novatos abusan del compresor, resultando en una mezcla sin dinámica y cansina para el oído.</li>
+        <li><strong>Ignorar el balance de frecuencias:</strong> No prestar atención a cómo interactúan los instrumentos en el espectro frecuencial puede crear mezclas confusas.</li>
+        <li><strong>Volúmenes incorrectos:</strong> Darle demasiado protagonismo a elementos que deberían estar en segundo plano.</li>
+        <li><strong>Uso excesivo de efectos:</strong> Reverb y delay mal aplicados pueden arruinar una buena mezcla.</li>
+        <li><strong>No comparar con referencias:</strong> Siempre es útil comparar tu mezcla con canciones profesionales del mismo género.</li>
+      </ol>
+      <p>Recuerda que la práctica constante y el entrenamiento del oído son clave para mejorar tus habilidades de mezcla.</p>
+    </div>
+  </div>
+
+  <div class="modal" id="modal2">
+    <div class="modal-content">
+      <button class="close-modal" onclick="closeModal('modal2')">&times;</button>
+      <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Producción musical" class="modal-image">
+      <h2>Cómo crear un beat atractivo en 10 pasos</h2>
+      <div class="blog-date">8 MAY 2025</div>
+      <p>Crear un beat que capte la atención desde los primeros segundos requiere técnica y creatividad. Sigue esta guía paso a paso para crear ritmos profesionales incluso si eres principiante en la producción musical.</p>
+      <ol>
+        <li><strong>Elige el tempo adecuado:</strong> Dependiendo del género, selecciona un BPM que funcione (ej. 70-90 para hip-hop, 120-130 para house).</li>
+        <li><strong>Empieza con la base rítmica:</strong> Crea un patrón de batería sólido con kick, snare y hi-hats.</li>
+        <li><strong>Añade un bajo pegadizo:</strong> El bajo es el puente entre la percusión y la melodía.</li>
+        <li><strong>Crea una melodía principal:</strong> Usa sintetizadores, pianos o samples para la línea melódica.</li>
+        <li><strong>Añade elementos de relleno:</strong> Percusiones adicionales, efectos sonoros, etc.</li>
+        <li><strong>Varía las secciones:</strong> Crea versos, estribillos y puentes para dar estructura.</li>
+        <li><strong>Automata parámetros:</strong> Agrega movimiento con cambios en filtros, volumen, panorámica.</li>
+        <li><strong>Ecualiza con cuidado:</strong> Elimina frecuencias conflictivas entre instrumentos.</li>
+        <li><strong>Usa efectos estratégicamente:</strong> Reverb, delay y otros efectos pueden dar profundidad.</li>
+        <li><strong>Revisa en diferentes sistemas:</strong> Escucha tu beat en auriculares, altavoces y el móvil.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="modal" id="modal3">
+    <div class="modal-content">
+      <button class="close-modal" onclick="closeModal('modal3')">&times;</button>
+      <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Producción musical" class="modal-image">
+      <h2>Los mejores plugins gratuitos para Mixfy</h2>
+      <div class="blog-date">1 MAY 2025</div>
+      <p>No necesitas gastar dinero para tener herramientas profesionales. Estos plugins gratuitos funcionan perfectamente con Mixfy:</p>
+      
+      <h3>Ecualizadores</h3>
+      <ul>
+        <li><strong>EQ-1:</strong> Ecualizador paramétrico con interfaz intuitiva.</li>
+        <li><strong>Voxengo Marvel GEQ:</strong> Ecualizador gráfico de 16 bandas.</li>
+      </ul>
+      
+      <h3>Compresores</h3>
+      <ul>
+        <li><strong>Comp-01:</strong> Compresor versátil con preajustes para diferentes fuentes.</li>
+        <li><strong>TDR Kotelnikov:</strong> Compresor de banda ancha con excelente calidad.</li>
+      </ul>
+      
+      <h3>Efectos</h3>
+      <ul>
+        <li><strong>Ambience Reverb:</strong> Reverb algorítmico con múltiples modos.</li>
+        <li><strong>Delay-3000:</strong> Delay digital con filtros incorporados.</li>
+      </ul>
+      
+      <h3>Instrumentos</h3>
+      <ul>
+        <li><strong>Synth1:</strong> Sintetizador virtual inspirado en clásicos analógicos.</li>
+        <li><strong>Spitfire LABS:</strong> Biblioteca de instrumentos acústicos muestreados.</li>
+      </ul>
+      
+      <p>Todos estos plugins están disponibles para descarga gratuita y son compatibles con la versión Pro de Mixfy.</p>
+    </div>
+  </div>
+
+  <script>
+    // Efecto de partículas
+    document.addEventListener('DOMContentLoaded', function() {
+      const particlesContainer = document.getElementById('particles');
+      const particleCount = 30;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        const size = Math.random() * 10 + 5;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.top = `${Math.random() * 100}%`;
+        particle.style.opacity = Math.random() * 0.5 + 0.1;
+        const duration = Math.random() * 20 + 10;
+        particle.style.animationDuration = `${duration}s`;
+        particle.style.animationDelay = `${Math.random() * 5}s`;
+        
+        particlesContainer.appendChild(particle);
+      }
+      
+      // Visualizador de audio estático
+      const audioVisualizer = document.getElementById('audioVisualizer');
+      const barCount = 30;
+      
+      for (let i = 0; i < barCount; i++) {
+        const bar = document.createElement('div');
+        bar.classList.add('audio-bar');
+        bar.style.height = `${Math.random() * 80 + 20}px`;
+        bar.style.animationDelay = `${i * 0.05}s`;
+        audioVisualizer.appendChild(bar);
+      }
+      
+      // Animar las barras del visualizador estático
+      function animateBars() {
+        document.querySelectorAll('#audioVisualizer .audio-bar').forEach(bar => {
+          const newHeight = Math.random() * 80 + 20;
+          bar.style.height = `${newHeight}px`;
+        });
+      }
+      
+      setInterval(animateBars, 100);
+      
+      // Menú móvil
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const navLinks = document.getElementById('navLinks');
+      
+      mobileMenuBtn.addEventListener('click', function() {
+        navLinks.classList.toggle('active');
+        this.innerHTML = navLinks.classList.contains('active') ? 
+          '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+      });
+      
+      // Cerrar menú al hacer clic en un enlace
+      document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', function() {
+          navLinks.classList.remove('active');
+          mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+        });
+      });
+      
+      // Cambiar navbar al hacer scroll
+      const navbar = document.getElementById('navbar');
+      
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 50) {
+          navbar.classList.add('scrolled');
+        } else {
+          navbar.classList.remove('scrolled');
+        }
+      });
+      
+      // Nota musical interactiva - Seguir scroll
+      const musicNote = document.getElementById('musicNote');
+      let mouseY = 0;
+      let currentY = 0;
+      const ease = 0.1; // Factor de suavizado
+
+      // Función para seguir el scroll suavemente
+      function followScroll() {
+          // Calcular la nueva posición con suavizado
+          const diff = mouseY - currentY;
+          currentY += diff * ease;
+          
+          // Aplicar la posición a la nota musical
+          musicNote.style.transform = `translateY(${currentY}px)`;
+          
+          // Continuar la animación
+          requestAnimationFrame(followScroll);
+      }
+
+      // Iniciar la animación
+      followScroll();
+
+      // Actualizar la posición objetivo al hacer scroll
+      window.addEventListener('scroll', function() {
+          mouseY = window.scrollY * 0.5; // Reducir el factor para que no baje demasiado
+      });
+
+      // Efecto al hacer clic
+      musicNote.addEventListener('click', function() {
+          // Efecto de rebote
+          this.style.animation = 'none';
+          void this.offsetWidth; // Trigger reflow
+          this.style.animation = 'pulse 0.5s ease-out';
+          
+          // Mantener el color primario
+          this.style.color = 'var(--primary)';
+          
+          // Efecto de onda de sonido
+          createSoundWaveEffect();
+          
+          // Reproducir sonido de nota
+          const noteSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3');
+          noteSound.play();
+      });
+
+      // Efecto de onda de sonido
+      function createSoundWaveEffect() {
+          const rect = musicNote.getBoundingClientRect();
+          const x = rect.left + rect.width / 2;
+          const y = rect.top + rect.height / 2;
+          
+          for (let i = 0; i < 3; i++) {
+              const wave = document.createElement('div');
+              wave.classList.add('wave-circle');
+              
+              wave.style.left = `${x}px`;
+              wave.style.top = `${y}px`;
+              wave.style.borderColor = musicNote.style.color || '#7b5c8e';
+              wave.style.animationDuration = `${i * 0.3 + 1}s`;
+              
+              document.body.appendChild(wave);
+              
+              setTimeout(() => {
+                  wave.remove();
+              }, 2000);
+          }
+      }
+
+      // FAQ acordeón
+      const faqQuestions = document.querySelectorAll('.faq-question');
+      
+      faqQuestions.forEach(question => {
+        question.addEventListener('click', function() {
+          this.classList.toggle('active');
+          const answer = this.nextElementSibling;
+          
+          if (this.classList.contains('active')) {
+            answer.style.maxHeight = answer.scrollHeight + 'px';
+            answer.style.padding = '20px';
+          } else {
+            answer.style.maxHeight = '0';
+            answer.style.padding = '0';
+          }
+        });
+      });
+      
+      // Smooth scrolling para enlaces
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          const targetId = this.getAttribute('href');
+          if (targetId === '#') return;
+          
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            window.scrollTo({
+              top: targetElement.offsetTop - 80,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+    });
+    
+    // Funciones para los modales del blog
+    function openModal(modalId) {
+      document.getElementById(modalId).style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeModal(modalId) {
+      document.getElementById(modalId).style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }
+    
+    // Cerrar modal al hacer clic fuera del contenido
+    window.addEventListener('click', function(event) {
+      if (event.target.classList.contains('modal')) {
+        event.target.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }
+    });
+  </script>
+</body>
+</html>
